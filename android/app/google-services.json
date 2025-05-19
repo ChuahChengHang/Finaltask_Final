@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "461798699353",
+    "project_id": "finaltask-4cefc",
+    "storage_bucket": "finaltask-4cefc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461798699353:android:0e46cb5dcae1753071dc48",
+        "android_client_info": {
+          "package_name": "com.anonymous.Finaltask"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ96s1gMMalOeEQFQEnLMpbwt0tc9N26c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

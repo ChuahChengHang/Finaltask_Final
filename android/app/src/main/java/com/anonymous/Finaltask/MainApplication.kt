@@ -1,4 +1,4 @@
-package com.finaltask
+package com.anonymous.Finaltask
 
 import android.app.Application
 import android.content.res.Configuration

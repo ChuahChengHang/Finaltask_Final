@@ -1,26 +1,28 @@
 import { Text, View, SafeAreaView, KeyboardAvoidingView, StyleSheet, Platform, TextInput, Pressable } from "react-native";
 import { useState } from "react";
-import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import auth from "@react-native-firebase/auth";
 import { FirebaseError } from "firebase/app";
 
+
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const signIn = async () => {
+  const signUp = async () => {
     setLoading(true);
     if (email === "" || password === "") {
       alert("Please fill in all fields");
       setLoading(false);
     }else if (email !== "" && password !== "") {
       try {
-        await auth().signInWithEmailAndPassword(email, password);
+        await auth().createUserWithEmailAndPassword(email, password);
+        alert("Please Check your email for verfication")
         setEmail("");
         setPassword("");
-        alert("Login successful")
+        setConfirmPassword("");
       }catch(e: any) {
         const err = e as FirebaseError
         alert("Login failed: " + err.message)
@@ -32,7 +34,7 @@ export default function Index() {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Sign Up</Text>
       <TextInput
         placeholder="Email"
         value={email}
@@ -48,6 +50,14 @@ export default function Index() {
         secureTextEntry
         autoCapitalize="none"
       />
+      <TextInput
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        style={styles.textInputStyle}
+        secureTextEntry
+        autoCapitalize="none"
+      />
       <Pressable
         style={({ pressed }) => [
           {
@@ -59,12 +69,10 @@ export default function Index() {
             marginBottom: 20,
           },
         ]}
-        onPress={() => signIn()}
+        onPress={() => signUp()}
       >
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
-      <Text style={styles.topOfSignUpText}>Don't have an account?</Text>
-      <Link href="/signup" style={styles.signuptext}>Sign Up</Link>
     </SafeAreaView>
   );
 }
@@ -92,16 +100,5 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-  },
-  signuptext: {
-    fontSize: 16,
-    color: '#24A0ED',
-    marginTop: 10,
-    textDecorationLine: 'underline',
-  },
-  topOfSignUpText: {
-    fontSize: 16,
-    color: '#000',
-    marginTop: 10,
   }
 })
