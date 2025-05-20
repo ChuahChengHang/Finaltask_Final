@@ -1,77 +1,92 @@
-import { Text, View, SafeAreaView, KeyboardAvoidingView, StyleSheet, Platform, TextInput, Pressable } from "react-native";
-import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { Text, SafeAreaView, StyleSheet, TextInput, Pressable } from "react-native";
+import { useState, useEffect } from "react";
 import { Link } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
 import auth from "@react-native-firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { useRouter } from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const signIn = async () => {
     setLoading(true);
     if (email === "" || password === "") {
       alert("Please fill in all fields");
       setLoading(false);
-    }else if (email !== "" && password !== "") {
+    } else if (email !== "" && password !== "") {
       try {
         await auth().signInWithEmailAndPassword(email, password);
         setEmail("");
         setPassword("");
-        router.replace("/(auth)")
-      }catch(e: any) {
-        const err = e as FirebaseError
-        alert("Login failed: " + err.message)
-        console.log(err.code)
-      }finally {
+        router.replace("/(auth)");
+      } catch (e: any) {
+        const err = e as FirebaseError;
+        alert("Login failed: " + err.message);
+        console.log(err.code);
+      } finally {
         setLoading(false);
       }
     }
-  }
+  };
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const value = await AsyncStorage.getItem('isLoggedIn');
+  //       if (value !== null && value === 'true') {
+  //         setIsLoggedIn(true);
+  //         router.replace("/(auth)")
+  //       }
+  //     } catch (error) {
+  //       console.error('Error retrieving data', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getData();
+  // }, []);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.textInputStyle}
-        autoCapitalize="none"
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.textInputStyle}
-        secureTextEntry
-        autoCapitalize="none"
-      />
-      <Pressable
-        style={({ pressed }) => [
-          {
-            backgroundColor: pressed ? '#ADD8E6' : '#24A0ED',
-            padding: 15,
-            borderRadius: 10,
-            alignItems: 'center',
-            width: '80%',
-            marginBottom: 20,
-          },
-        ]}
-        onPress={() => signIn()}
-      >
-        <Text style={styles.buttonText}>Login</Text>
-      </Pressable>
-      <Text style={styles.topOfSignUpText}>Don't have an account?</Text>
-      <Link href="/signup" style={styles.signuptext}>Sign Up</Link>
-    </SafeAreaView>
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.title}>Login</Text>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            style={styles.textInputStyle}
+            autoCapitalize="none"
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            style={styles.textInputStyle}
+            secureTextEntry
+            autoCapitalize="none"
+          />
+          <Pressable
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? '#ADD8E6' : '#24A0ED',
+                padding: 15,
+                borderRadius: 10,
+                alignItems: 'center',
+                width: '80%',
+                marginBottom: 20,
+              },
+            ]}
+            onPress={() => signIn()}
+          >
+            <Text style={styles.buttonText}>Login</Text>
+          </Pressable>
+          <Text style={styles.topOfSignUpText}>Don't have an account?</Text>
+          <Link href="/signup" style={styles.signuptext}>Sign Up</Link>
+        </SafeAreaView>
   );
 }
 

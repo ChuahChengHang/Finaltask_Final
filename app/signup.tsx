@@ -15,24 +15,23 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  const storeData = async () => {
-        try {
-          await AsyncStorage.setItem('isLoggedIn', 'true');
-        } catch (error) {
-          console.error('Error saving data', error);
-        }
-    };
+  // const storeData = async () => {
+  //       try {
+  //         await AsyncStorage.setItem('isLoggedIn', 'true');
+  //       } catch (error) {
+  //         console.error('Error saving data', error);
+  //       }
+  //   };
 
   const signUp = async () => {
-    setLoading(true);
     if (email === "" || password === "") {
       alert("Please fill in all fields");
       setLoading(false);
     }else if (email !== "" && password !== "") {
       try {
         await auth().createUserWithEmailAndPassword(email, password);
-        alert("Please Check your email for verfication")
-        storeData();
+        alert("Your account has been created successfully");
+        // storeData();
         setEmail("");
         setPassword("");
         setConfirmPassword("");
@@ -41,8 +40,6 @@ export default function Index() {
         const err = e as FirebaseError
         alert("Login failed: " + err.message)
         console.log(err.code)
-      }finally {
-        setLoading(false);
       }
     }
   }
