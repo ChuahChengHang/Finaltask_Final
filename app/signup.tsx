@@ -3,6 +3,9 @@ import { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import auth from "@react-native-firebase/auth";
 import { FirebaseError } from "firebase/app";
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default function Index() {
@@ -10,6 +13,15 @@ export default function Index() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
+
+  const storeData = async () => {
+        try {
+          await AsyncStorage.setItem('isLoggedIn', 'true');
+        } catch (error) {
+          console.error('Error saving data', error);
+        }
+    };
 
   const signUp = async () => {
     setLoading(true);
@@ -20,9 +32,11 @@ export default function Index() {
       try {
         await auth().createUserWithEmailAndPassword(email, password);
         alert("Please Check your email for verfication")
+        storeData();
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+        navigation.goBack();
       }catch(e: any) {
         const err = e as FirebaseError
         alert("Login failed: " + err.message)
@@ -71,7 +85,7 @@ export default function Index() {
         ]}
         onPress={() => signUp()}
       >
-        <Text style={styles.buttonText}>Login</Text>
+        <Text style={styles.buttonText}>Sign Up</Text>
       </Pressable>
     </SafeAreaView>
   );

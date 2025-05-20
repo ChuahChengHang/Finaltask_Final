@@ -1,14 +1,20 @@
 import { Text, View, SafeAreaView, KeyboardAvoidingView, StyleSheet, Platform, TextInput, Pressable } from "react-native";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import auth from "@react-native-firebase/auth";
 import { FirebaseError } from "firebase/app";
+import { useRouter } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
+  const router = useRouter();
 
   const signIn = async () => {
     setLoading(true);
@@ -20,7 +26,7 @@ export default function Index() {
         await auth().signInWithEmailAndPassword(email, password);
         setEmail("");
         setPassword("");
-        alert("Login successful")
+        router.replace("/(auth)")
       }catch(e: any) {
         const err = e as FirebaseError
         alert("Login failed: " + err.message)
