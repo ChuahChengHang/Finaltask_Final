@@ -3,11 +3,10 @@ import { useState } from "react";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function Index() {
+export default function Voting() {
     return(
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>DHANVIN</Text>
-            <Text style={styles.textTitle}>VOTES</Text>
+            <Text>Hello people!</Text>
         </SafeAreaView>
     )
 }
@@ -19,14 +18,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: "#FF0000"
-  },
-  textTitle: {
-    fontSize: 24,
-    marginBottom: 20,
-    fontWeight: 'bold',
-  }
 })
