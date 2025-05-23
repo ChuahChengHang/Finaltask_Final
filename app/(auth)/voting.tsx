@@ -1,20 +1,23 @@
 import { Text, View, SafeAreaView, KeyboardAvoidingView, StyleSheet, Platform, TextInput, Pressable, Image } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import firestore from "@react-native-firebase/firestore";
 import { FirestoreError } from "@react-native-firebase/firestore";
 
-
 export default function Voting() {
     const [disabled, setDisabled] = useState(false);
     const db = firestore();
+    const [currentTime, setCurrentTime] = useState("");
+    const targetTime = "00:00:00 AM"
+    console.log(currentTime);
     const addYesVote = async () => {
         try {
             await db.collection("Yes").add({
                 vote: 1,
             });
             setDisabled(true);
+            alert("Vote added successfully! You can vote again after 24 hours")
     }catch (e: any) {
         const error = e as FirestoreError
         alert("Error adding vote: " + error.message + "\nPlease try again!");
@@ -26,14 +29,24 @@ const addNoVote = async () => {
             vote: 1,
         });
         setDisabled(true);
+        alert("Vote added successfully! You can vote again after 24 hours")
     }catch (e: any) {
         const error = e as FirestoreError
         alert("Error adding vote: " + error.message + "\nPlease try again!");
     }
 }
-// const timeOutToVote = () => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().toLocaleTimeString();
+      setCurrentTime(now);
 
-// }
+      if (now === targetTime) {
+        setDisabled(false);      
+    }
+    }, 1000); 
+
+    return () => clearInterval(interval); 
+  }, [])
     return(
         <SafeAreaView style={styles.container}>
             <Text style={styles.textStyle}>Vote for adding hot chocolate or not here!</Text>

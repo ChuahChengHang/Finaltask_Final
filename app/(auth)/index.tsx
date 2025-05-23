@@ -21,7 +21,7 @@ export default function Index() {
   useEffect(() => {
     getDataForYes();
     getDataForNo();
-  }, []);
+  });
     return(
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>HOT CHOCOLATE</Text>
