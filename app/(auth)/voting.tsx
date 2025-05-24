@@ -4,13 +4,20 @@ import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import firestore from "@react-native-firebase/firestore";
 import { FirestoreError } from "@react-native-firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Voting() {
     const [disabled, setDisabled] = useState(false);
     const db = firestore();
     const [currentTime, setCurrentTime] = useState("");
-    const targetTime = "00:00:00 AM"
-    console.log(currentTime);
+    // const clearAsyncStorage = async () => {
+    //     try {
+    //     await AsyncStorage.clear();
+    //     }catch(error) {
+    //     console.log("Error clearing async storage: ", error);
+    //     }
+    // }
+    const targetTime = "00:00:00 AM"    
     const addYesVote = async () => {
         try {
             await db.collection("Yes").add({

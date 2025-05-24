@@ -8,6 +8,7 @@ export default function Index() {
   const db = firestore();
   const [yesVotes, setYesVotes] = useState(0);
   const [noVotes, setNoVotes] = useState(0);
+
   const getDataForYes = async () => {
     const snapshot = await db.collection("Yes").get();
     const data = snapshot.docs.map(doc => doc.data())

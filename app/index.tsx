@@ -13,6 +13,13 @@ export default function Index() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const storeData = async (key: string, value: string) => {
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (error) {
+      console.error("Error storing data", error);
+    }
+  }
   const signIn = async () => {
     setLoading(true);
     if (email === "" || password === "") {
@@ -23,6 +30,7 @@ export default function Index() {
         await auth().signInWithEmailAndPassword(email, password);
         setEmail("");
         setPassword("");
+        storeData("isLoggedIn", "true")
         router.replace("/(auth)");
       } catch (e: any) {
         const err = e as FirebaseError;
