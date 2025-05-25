@@ -17,43 +17,73 @@ export default function Voting() {
     //     console.log("Error clearing async storage: ", error);
     //     }
     // }
-    const targetTime = "00:00:00 AM"    
-    const addYesVote = async () => {
+    const timeLimit = async () => {
         try {
-            await db.collection("Yes").add({
-                vote: 1,
-            });
-            setDisabled(true);
-            alert("Vote added successfully! You can vote again after 24 hours")
-    }catch (e: any) {
-        const error = e as FirestoreError
+            await AsyncStorage.setItem("votedToday", "true");
+        }catch(error) {
+            console.log("Error for storing voted today: ", error);
+        }
+        }
+const targetTime = "12:00:00 AM"; 
+
+const addYesVote = async () => {
+    try {
+        await db.collection("Yes").add({
+            vote: 1,
+        });
+        setDisabled(true);
+        timeLimit();
+        alert("Vote added successfully! You can vote again after 24 hours");
+    } catch (e: any) {
+        const error = e as FirestoreError;
         alert("Error adding vote: " + error.message + "\nPlease try again!");
     }
-}
+};
+
 const addNoVote = async () => {
     try {
         await db.collection("No").add({
             vote: 1,
         });
         setDisabled(true);
-        alert("Vote added successfully! You can vote again after 24 hours")
-    }catch (e: any) {
-        const error = e as FirestoreError
+        timeLimit();
+        alert("Vote added successfully! You can vote again after 24 hours");
+    } catch (e: any) {
+        const error = e as FirestoreError;
         alert("Error adding vote: " + error.message + "\nPlease try again!");
     }
-}
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date().toLocaleTimeString();
-      setCurrentTime(now);
+};
 
-      if (now === targetTime) {
-        setDisabled(false);      
+const getVotedToday = async () => {
+    try {
+        const value = await AsyncStorage.getItem("votedToday");
+        setDisabled(() => value === "true");
+    } catch (error) {
+        console.error("Error retrieving votedToday from AsyncStorage: ", error);
     }
-    }, 1000); 
+};
 
-    return () => clearInterval(interval); 
-  }, [])
+useEffect(() => {
+    const interval = setInterval(() => {
+        const now = new Date().toLocaleTimeString();
+        setCurrentTime(now);
+
+        if (now === targetTime) {
+            setDisabled(false);
+            try {
+                AsyncStorage.setItem("votedToday", "false");
+            } catch (error) {
+                console.log("Error for setting votedToday to false: ", error);
+            }
+        }
+    }, 1000);
+
+    return () => clearInterval(interval);
+}, []);
+
+useEffect(() => {
+    getVotedToday();
+}, [])
     return(
         <SafeAreaView style={styles.container}>
             <Text style={styles.textStyle}>Vote for adding hot chocolate or not here!</Text>
@@ -87,6 +117,9 @@ const addNoVote = async () => {
                 <Text>Don't Add Hot Chocolate Machines</Text>
         </Pressable>
             </View>
+            {/* <Pressable onPress={() => clearAsyncStorage()}>
+                <Text>Reset storage</Text>
+            </Pressable> */}
         </SafeAreaView>
     )
 }

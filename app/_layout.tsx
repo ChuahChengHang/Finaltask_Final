@@ -13,10 +13,10 @@ export default function RootLayout() {
       const stored = await AsyncStorage.getItem("isLoggedIn");
 
       if (currentUser && stored === "true") {
-        router.replace("/(auth)");
+        router.replace("/(auth)")
       }
 
-      setAuthChecked(true); // Only show UI after checking auth
+      setAuthChecked(true);
     };
 
     checkLoginStatus();
