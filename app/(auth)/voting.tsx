@@ -33,7 +33,7 @@ const addYesVote = async () => {
         });
         setDisabled(true);
         timeLimit();
-        alert("Vote added successfully! You can vote again after 24 hours");
+        alert("Vote added successfully! You can vote again after 12AM tomorrow!");
     } catch (e: any) {
         const error = e as FirestoreError;
         alert("Error adding vote: " + error.message + "\nPlease try again!");
