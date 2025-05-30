@@ -38,6 +38,8 @@ yarn-error.*
 
 app-example
 
-# Firebase config files
-google-services.json
-GoogleService-Info.plist
+# iOS Firebase Config
+ios/GoogleService-Info.plist
+
+# Android Firebase Config
+android/app/google-services.json
