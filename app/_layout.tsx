@@ -15,7 +15,6 @@ export default function RootLayout() {
       if (currentUser && stored === "true") {
         router.replace("/(auth)")
       }
-
       setAuthChecked(true);
     };
 
